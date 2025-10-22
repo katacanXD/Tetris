@@ -1,82 +1,47 @@
 #pragma once
 #include <vector>
-#include <cstdlib> // для rand()
-#include <ctime>   // для time()
-
-using namespace std;
+#include <cstdlib>
+#include <ctime>
 
 enum class BlockType {
-    TYPE_0, // I
-    TYPE_1, // O  
-    TYPE_2, // T
-    TYPE_3, // L
-    TYPE_4, // J
-    TYPE_5, // S
-    TYPE_6  // Z
+    I, O, T, L, J, S, Z
 };
 
 struct Block {
     BlockType type;
-    vector<vector<int>> shape; // форма фигуры
-    int x, y; // позиция на поле
+    std::vector<std::vector<int>> shape;
+    int x;
+    int y;
 };
 
-class BlockManager { // исправлено название
+class BlockManager {
 private:
-    vector<vector<vector<int>>> blocks = {
-        // TYPE_0 (I-block)
-        {
-            {1,1,1,1}
-        },
-        // TYPE_1 (O-block)
-        {
-            {1,1},
-            {1,1}
-        },
-        // TYPE_2 (T-block)
-        {
-            {1,1,1},
-            {0,1,0}
-        },
-        // TYPE_3 (L-block)
-        {
-            {1,1,1},
-            {1,0,0}
-        },
-        // TYPE_4 (J-block)
-        {
-            {1,1,1},
-            {0,0,1}
-        },
-        // TYPE_5 (S-block)
-        {
-            {0,1,1},
-            {1,1,0}
-        },
-        // TYPE_6 (Z-block)
-        {
-            {1,1,0},
-            {0,1,1}
-        }
+    const std::vector<std::vector<std::vector<int>>> shapes = {
+        {{1,1,1,1}},                 // I
+        {{1,1},{1,1}},               // O
+        {{1,1,1},{0,1,0}},           // T
+        {{1,1,1},{1,0,0}},           // L
+        {{1,1,1},{0,0,1}},           // J
+        {{0,1,1},{1,1,0}},           // S
+        {{1,1,0},{0,1,1}}            // Z
     };
 
 public:
     BlockManager() {
-        srand(time(nullptr)); // инициализация генератора случайных чисел
+        srand((unsigned)time(nullptr));
     }
 
     Block createBlock(BlockType type) {
-        int index = static_cast<int>(type);
-        Block block;
-        block.type = type;
-        block.shape = blocks[index]; // копируем форму
-        block.x = 4; // начальная позиция X
-        block.y = 3; // начальная позиция Y
-        return block;
+        int i = static_cast<int>(type);
+        Block b;
+        b.type = type;
+        b.shape = shapes[i];
+        b.x = 4;
+        b.y = 0;
+        return b;
     }
 
     Block createRandomBlock() {
-        BlockType randomType = static_cast<BlockType>(rand() % 7);
-        return createBlock(randomType);
+        return createBlock(static_cast<BlockType>(rand() % 7));
     }
 };
