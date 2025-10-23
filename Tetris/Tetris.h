@@ -18,7 +18,7 @@ private:
 
     // Для кд управления
     std::chrono::steady_clock::time_point lastInputTime;
-    float inputCooldown = 0.1f; // 200ms cooldown
+    float inputCooldown = 0.12f; // 120ms cooldown
 
 public:
     void start() {
@@ -60,7 +60,7 @@ public:
                     moveDown();
                     lastInputTime = now;
                 }
-                else if (GetAsyncKeyState(VK_UP)) { // UP
+                else if (GetAsyncKeyState(0x57)) { // UP
                     rotate();
                     lastInputTime = now;
                 }
@@ -84,14 +84,14 @@ private:
         }
 
         // Ускоряем игру в зависимости от счета
-        if (board.getScore() >= 1000 && board.getScore() < 10000) {
-            tickInterval = 0.8f;
+        if (board.getScore() >= 100 && board.getScore() < 10000) {
+            tickInterval = 0.6f;
         }
-        else if (board.getScore() >= 10000 && board.getScore() < 100000) {
-            tickInterval = 0.5f;
-        }
-        else if (board.getScore() >= 100000) {
+        else if (board.getScore() >= 1000 && board.getScore() < 100000) {
             tickInterval = 0.2f;
+        }
+        else if (board.getScore() >= 10000) {
+            tickInterval = 0.05f;
         }
 
         board.render(&currentBlock);
